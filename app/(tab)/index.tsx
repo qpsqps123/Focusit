@@ -14,5 +14,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#69247c",
     alignItems: "center",
   },
-  title: { fontSize: 24, color: "#FAC67A", marginTop: 30, }
+  title: { fontSize: 24, color: "#FAC67A", marginTop: 80, }
 })
