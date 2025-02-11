@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@expo-google-fonts/b612-mono": "^0.2.3",
     "@expo-google-fonts/kaushan-script": "^0.2.3",
     "@expo-google-fonts/yeon-sung": "^0.2.3",
     "@types/jest": "^29.5.12",
