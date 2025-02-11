@@ -7,7 +7,7 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { theme } from "../styles/variable";
+import { theme } from "../styles/variables";
 import { useState } from "react";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";

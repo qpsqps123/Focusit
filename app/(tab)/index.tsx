@@ -10,7 +10,7 @@ import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { Image } from "expo-image";
 import { useState } from "react";
-import { theme } from "../styles/variable";
+import { theme } from "../styles/variables";
 const AddImage = require("@/assets/images/add.png");
 
 export default function TodoList() {
