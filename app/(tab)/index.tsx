@@ -1,13 +1,20 @@
-import { Text, View, StyleSheet, Pressable, TextInput, FlatList } from "react-native";
-import { useFonts, YeonSung_400Regular } from '@expo-google-fonts/yeon-sung';
-import { KaushanScript_400Regular} from '@expo-google-fonts/kaushan-script';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  TextInput,
+  SafeAreaView,
+} from "react-native";
+import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
+import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { Image } from "expo-image";
 import { useState } from "react";
 import { theme } from "../styles/variable";
-const AddImage = require("@/assets/images/add.png")
+const AddImage = require("@/assets/images/add.png");
 
 export default function TodoList() {
-  const [addTaskInputValue, setAddTaskInputValue] = useState('')
+  const [addTaskInputValue, setAddTaskInputValue] = useState("");
 
   let [fontsLoaded] = useFonts({
     YeonSung_400Regular,
@@ -18,19 +25,31 @@ export default function TodoList() {
     return null;
   }
 
-  const handlePress = () => {
-    console.log(123)
-  }
+  const handlePress = () => {};
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Todo App</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Todo List</Text>
       <View style={styles.todoInputContainer}>
-        <TextInput style={styles.addTaskInput} onChangeText={(newText)=>setAddTaskInputValue(newText)} defaultValue={addTaskInputValue} placeholder="Add a task!"/>
-        <Pressable style={styles.addTaskPressableContainer} onPress={handlePress}><Image style={styles.addTaskImage} source={AddImage} /></Pressable>
+        <TextInput
+          style={styles.addTaskInput}
+          onChangeText={(newText) => setAddTaskInputValue(newText)}
+          defaultValue={addTaskInputValue}
+          placeholder="Add a task!"
+        />
+        <Pressable
+          style={styles.addTaskPressableContainer}
+          onPress={handlePress}
+        >
+          <Image style={styles.addTaskImage} source={AddImage} />
+        </Pressable>
       </View>
-      <View style={styles.renderTaskContainer}><Text style={styles.renderTaskList}>List1aslkjdfkljsangdljnsklgdnaskljfglkajsnfgkjanskldjnkljsdnaksdgnlk</Text><Text style={styles.renderTaskList}>List2</Text><Text style={styles.renderTaskList}>List3</Text></View>
-    </View>
+      <View style={styles.renderTaskContainer}>
+        <Text style={styles.renderTaskList}>List1</Text>
+        <Text style={styles.renderTaskList}>List2</Text>
+        <Text style={styles.renderTaskList}>List3</Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -40,36 +59,44 @@ const styles = StyleSheet.create({
     backgroundColor: theme.$background,
     alignItems: "center",
   },
-  title: { fontSize: 24, color: theme.$primary, marginTop: 80, fontFamily: "KaushanScript_400Regular" },
+  title: {
+    fontSize: 32,
+    color: theme.$primary,
+    marginTop: 40,
+    fontFamily: "KaushanScript_400Regular",
+    paddingHorizontal: 5,
+  },
   todoInputContainer: {
-    marginTop: 20,
-    flexDirection: 'row',
+    marginTop: 50,
+    flexDirection: "row",
   },
   addTaskInput: {
     color: theme.$primary,
-    fontSize: 20,
-    width: 200,
-    height: 40,
-    fontFamily: "YeonSung_400Regular"
+    fontSize: 24,
+    width: 220,
+    height: 50,
+    fontFamily: "YeonSung_400Regular",
+    borderBottomWidth: 2,
+    borderBottomColor: "rgba(255,255,255,0.2)",
   },
   addTaskPressableContainer: {
     marginLeft: 10,
   },
   addTaskImage: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   renderTaskContainer: {
-    marginTop: 30,
-    width: '80%',
+    marginTop: 40,
+    width: "80%",
     gap: 20,
   },
   renderTaskList: {
-    color: "aaa",
+    color: theme.$black,
     fontSize: 20,
     fontFamily: "YeonSung_400Regular",
     backgroundColor: theme.$primary,
     padding: 10,
-    borderRadius: 10
-  }
-})
+    borderRadius: 10,
+  },
+});
