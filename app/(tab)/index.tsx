@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   renderTaskContainer: {
-    marginTop: 40,
+    marginTop: 80,
     width: "80%",
     gap: 20,
   },
