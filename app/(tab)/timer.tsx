@@ -76,7 +76,7 @@ export default function Timer() {
         style={styles.timerTimeSettingBtn}
         onPress={handleTimerTimeSettingVisible}
       >
-        <MaterialIcons name="timer" size={40} color={theme.$white} />
+        <MaterialIcons name="timer" size={35} color={theme.$white} />
       </Pressable>
       <Text style={styles.title}>Timer</Text>
       <View style={styles.timerContainer}>
@@ -194,7 +194,9 @@ const styles = StyleSheet.create({
   },
   timerContainer: {
     gap: 20,
-    marginTop: "30%",
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
     width: 300,
     height: 150,
   },
