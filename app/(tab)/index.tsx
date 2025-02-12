@@ -8,10 +8,9 @@ import {
 } from "react-native";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
-import { Image } from "expo-image";
 import { useState } from "react";
 import { theme } from "../styles/variables";
-const AddImage = require("@/assets/images/add.png");
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function TodoList() {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
@@ -41,7 +40,7 @@ export default function TodoList() {
           style={styles.addTaskPressableContainer}
           onPress={handlePress}
         >
-          <Image style={styles.addTaskImage} source={AddImage} />
+          <FontAwesome6 name="plus" size={40} color={theme.$white} />
         </Pressable>
       </View>
       <View style={styles.renderTaskContainer}>
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(255,255,255,0.2)",
   },
   addTaskPressableContainer: {
-    marginLeft: 10,
+    marginLeft: 20,
   },
   addTaskImage: {
     width: 50,
