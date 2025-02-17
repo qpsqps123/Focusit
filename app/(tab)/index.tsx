@@ -9,7 +9,7 @@ import {
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { useState } from "react";
-import { theme } from "../styles/variables";
+import { theme } from "@/styles/variables";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function TodoList() {
