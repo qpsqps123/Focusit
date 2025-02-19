@@ -11,9 +11,19 @@ import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { useState } from "react";
 import { theme } from "@/styles/variables";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { todoListStorage } from "@/store/store";
+import uuid from "react-native-uuid";
+
+interface ITodoList {
+  id: string;
+  task: string;
+}
 
 export default function TodoList() {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
+  const [tasks, setTasks] = useState<ITodoList[]>(() => {
+    return JSON.parse(todoListStorage.getString("tasks") ?? "[]");
+  });
 
   let [fontsLoaded] = useFonts({
     YeonSung_400Regular,
@@ -24,7 +34,28 @@ export default function TodoList() {
     return null;
   }
 
-  const handlePress = () => {};
+  const handleAddTaskInputChange = (newText: string) => {
+    setAddTaskInputValue(() => newText);
+  };
+
+  const handleAddTask = () => {
+    if (!addTaskInputValue.trim()) return;
+
+    const newTask = { id: uuid.v4(), task: addTaskInputValue };
+    const updatedTasks = [...tasks, newTask];
+
+    todoListStorage.set("tasks", JSON.stringify(updatedTasks));
+
+    setTasks(updatedTasks);
+    setAddTaskInputValue("");
+  };
+
+  const handleRemoveTask = (taskToRemove: ITodoList) => {
+    const updatedTasks = tasks.filter((item) => item.id !== taskToRemove.id);
+    setTasks(updatedTasks);
+
+    todoListStorage.set("tasks", JSON.stringify(updatedTasks));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,21 +63,27 @@ export default function TodoList() {
       <View style={styles.todoInputContainer}>
         <TextInput
           style={styles.addTaskInput}
-          onChangeText={(newText) => setAddTaskInputValue(newText)}
+          onChangeText={handleAddTaskInputChange}
           defaultValue={addTaskInputValue}
           placeholder="Add a task!"
         />
         <Pressable
           style={styles.addTaskPressableContainer}
-          onPress={handlePress}
+          onPress={handleAddTask}
         >
           <FontAwesome6 name="plus" size={40} color={theme.$white} />
         </Pressable>
       </View>
       <View style={styles.renderTaskContainer}>
-        <Text style={styles.renderTaskList}>List1</Text>
-        <Text style={styles.renderTaskList}>List2</Text>
-        <Text style={styles.renderTaskList}>List3</Text>
+        {tasks.map((item) => (
+          <Pressable
+            key={item.id}
+            style={styles.renderTaskList}
+            onPress={() => handleRemoveTask(item)}
+          >
+            <Text>{item.task}</Text>
+          </Pressable>
+        ))}
       </View>
     </SafeAreaView>
   );
