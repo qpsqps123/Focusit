@@ -65,6 +65,7 @@ export default function TodoList() {
           style={styles.addTaskInput}
           onChangeText={handleAddTaskInputChange}
           defaultValue={addTaskInputValue}
+          placeholderTextColor="rgba(0, 0, 0, 0.4)"
           placeholder="Add a task!"
         />
         <Pressable
@@ -81,7 +82,7 @@ export default function TodoList() {
             style={styles.renderTaskList}
             onPress={() => handleRemoveTask(item)}
           >
-            <Text>{item.task}</Text>
+            <Text style={styles.renderTaskText}>{item.task}</Text>
           </Pressable>
         ))}
       </View>
@@ -128,11 +129,13 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   renderTaskList: {
-    color: theme.$black,
-    fontSize: 20,
-    fontFamily: "YeonSung_400Regular",
     backgroundColor: theme.$primary,
     padding: 10,
     borderRadius: 10,
+  },
+  renderTaskText: {
+    fontSize: 20,
+    color: theme.$black,
+    fontFamily: "YeonSung_400Regular",
   },
 });
