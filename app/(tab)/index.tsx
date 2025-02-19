@@ -5,6 +5,7 @@ import {
   Pressable,
   TextInput,
   SafeAreaView,
+  FlatList,
 } from "react-native";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
@@ -76,15 +77,22 @@ export default function TodoList() {
         </Pressable>
       </View>
       <View style={styles.renderTaskContainer}>
-        {tasks.map((item) => (
-          <Pressable
-            key={item.id}
-            style={styles.renderTaskList}
-            onPress={() => handleRemoveTask(item)}
-          >
-            <Text style={styles.renderTaskText}>{item.task}</Text>
-          </Pressable>
-        ))}
+        <FlatList
+          data={tasks}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Pressable
+              style={({ pressed }) => [
+                styles.renderTaskBtn,
+                { opacity: pressed ? 0.7 : 1 },
+              ]}
+              onPress={() => handleRemoveTask(item)}
+            >
+              <Text style={styles.renderTaskText}>{item.task}</Text>
+            </Pressable>
+          )}
+          contentContainerStyle={styles.renderTaskList}
+        />
       </View>
     </SafeAreaView>
   );
@@ -124,11 +132,14 @@ const styles = StyleSheet.create({
     height: 50,
   },
   renderTaskContainer: {
+    flex: 1,
     marginTop: 80,
     width: "80%",
-    gap: 20,
   },
   renderTaskList: {
+    gap: 20,
+  },
+  renderTaskBtn: {
     backgroundColor: theme.$primary,
     padding: 10,
     borderRadius: 10,
