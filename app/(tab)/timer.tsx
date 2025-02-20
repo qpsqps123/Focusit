@@ -8,17 +8,38 @@ import {
   TextInput,
 } from "react-native";
 import { theme } from "@/styles/variables";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { B612Mono_400Regular } from "@expo-google-fonts/b612-mono";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function Timer() {
-  const [timerMinutes, setTimerMinutes] = useState(0);
+  const [timerMinutes, setTimerMinutes] = useState(50);
   const [timerSeconds, setTimerSeconds] = useState(0);
+  const [initMinutes, setInitMinutes] = useState(50);
   const [isRunning, setIsRunning] = useState(false);
   const [timerTimeSettingVisible, setTimerTimeSettingVisible] = useState(false);
+
+  useEffect(() => {
+    if (isRunning === false) return;
+    if (timerMinutes <= 0 && timerSeconds <= 0) {
+      setIsRunning(false);
+      setTimerMinutes(initMinutes);
+      setTimerSeconds(0);
+    }
+
+    const timeId = setTimeout(() => {
+      if (timerSeconds <= 0) {
+        setTimerMinutes((prevState) => prevState - 1);
+        setTimerSeconds(59);
+      } else {
+        setTimerSeconds((prevState) => prevState - 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(timeId);
+  }, [isRunning, timerSeconds, timerMinutes]);
 
   let [fontsLoaded] = useFonts({
     YeonSung_400Regular,
@@ -31,6 +52,9 @@ export default function Timer() {
   }
 
   const handleTimerTimeSettingVisible = () => {
+    if (isRunning) return;
+    if (timerMinutes !== initMinutes && timerSeconds !== 0) return;
+
     setTimerTimeSettingVisible(!timerTimeSettingVisible);
   };
 
@@ -38,7 +62,11 @@ export default function Timer() {
     setIsRunning(!isRunning);
   };
 
-  const handleTimerReset = () => {};
+  const handleTimerReset = () => {
+    setIsRunning(false);
+    setTimerMinutes(initMinutes);
+    setTimerSeconds(0);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,22 +81,32 @@ export default function Timer() {
             <TextInput
               style={styles.timerTimeSettingTextInput}
               keyboardType="number-pad"
+              defaultValue={String(initMinutes)}
               onChangeText={(newText) => {
-                const newMinutes = Number(newText);
-                if (newMinutes > 99) {
+                setInitMinutes(Number(newText));
+
+                if (Number(newText) > 99) {
+                  setInitMinutes(99);
                   setTimerMinutes(99);
                   return;
+                } else {
+                  setTimerMinutes(Number(newText));
                 }
-                setTimerMinutes(newMinutes);
               }}
               autoFocus={true}
             />
           </View>
           <Pressable
-            style={styles.timerTimeSettingApplyBtn}
+            style={({ pressed }) => [
+              styles.timerTimeSettingApplyBtn,
+              {
+                borderRightWidth: pressed ? 1 : 2,
+                borderBottomWidth: pressed ? 1 : 2,
+              },
+            ]}
             onPress={handleTimerTimeSettingVisible}
           >
-            <Text style={styles.timerTimerSettingApplyBtnText}>Done!</Text>
+            <Text style={styles.timerTimeSettingApplyBtnText}>Done!</Text>
           </Pressable>
         </View>
       </Modal>
@@ -110,9 +148,9 @@ export default function Timer() {
             onPress={handleTimerExecution}
           >
             {isRunning ? (
-              <Text style={styles.timerControlBtnsText}>정지</Text>
+              <Text style={styles.timerControlBtnsText}>Stop</Text>
             ) : (
-              <Text style={styles.timerControlBtnsText}>시작</Text>
+              <Text style={styles.timerControlBtnsText}>Start</Text>
             )}
           </Pressable>
           <Pressable
@@ -123,7 +161,7 @@ export default function Timer() {
             ]}
             onPress={handleTimerReset}
           >
-            <Text style={styles.timerControlBtnsText}>초기화</Text>
+            <Text style={styles.timerControlBtnsText}>Reset</Text>
           </Pressable>
         </View>
       </View>
@@ -145,7 +183,7 @@ const styles = StyleSheet.create({
     height: 310,
     backgroundColor: theme.$white,
     borderRadius: 30,
-    borderBottomWidth: 2,
+    borderBottomWidth: 4,
     borderBottomColor: theme.$black,
     borderRightWidth: 4,
     borderRightColor: theme.$black,
@@ -161,7 +199,7 @@ const styles = StyleSheet.create({
   timerTimeSettingTextInput: {
     fontSize: 36,
     color: theme.$darkGray,
-    fontFamily: "B612Mono_400Regular",
+    fontFamily: "YeonSung_400Regular",
     width: "100%",
     textAlign: "center",
   },
@@ -178,12 +216,18 @@ const styles = StyleSheet.create({
   timerTimeSettingApplyBtn: {
     position: "absolute",
     bottom: 30,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingTop: 17,
+    paddingLeft: 25,
+    paddingRight: 18,
+    paddingBottom: 13,
+    borderColor: theme.$gray,
+    borderRadius: 25,
+    backgroundColor: "#f2f2f2",
   },
-  timerTimerSettingApplyBtnText: {
-    fontSize: 24,
+  timerTimeSettingApplyBtnText: {
+    fontSize: 22,
     color: theme.$darkGray,
+    fontFamily: "YeonSung_400Regular",
   },
   title: {
     fontSize: 32,
