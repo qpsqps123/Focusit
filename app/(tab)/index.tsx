@@ -66,7 +66,7 @@ export default function TodoList() {
           style={styles.addTaskInput}
           onChangeText={handleAddTaskInputChange}
           defaultValue={addTaskInputValue}
-          placeholderTextColor="rgba(0, 0, 0, 0.4)"
+          placeholderTextColor="rgba(255, 255, 255, 0.4)"
           placeholder="Add a task!"
         />
         <Pressable
