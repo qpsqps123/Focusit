@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 
-export interface ITodoList {
+export interface Tasks {
   id: string;
   task: string;
 }
 
-export interface IProps {
-  tasks: Array<ITodoList>;
-  setTasks: Dispatch<SetStateAction<Array<ITodoList>>>;
+export interface Props {
+  tasks: Array<Tasks>;
+  setTasks: Dispatch<SetStateAction<Array<Tasks>>>;
 }

@@ -1,11 +1,11 @@
 import { theme } from "@/styles/variables";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { IProps, ITodoList } from "./types";
 import { todoListStorage } from "@/store/store";
 import { useFonts } from "expo-font";
 import { YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
+import { Props, Tasks } from "./types";
 
-export default function RenderTask({ tasks, setTasks }: IProps) {
+export default function RenderTask({ tasks, setTasks }: Props) {
   let [fontsLoaded] = useFonts({
     YeonSung_400Regular,
   });
@@ -14,7 +14,7 @@ export default function RenderTask({ tasks, setTasks }: IProps) {
     return null;
   }
 
-  const handleRemoveTask = (taskToRemove: ITodoList) => {
+  const handleRemoveTask = (taskToRemove: Tasks) => {
     const updatedTasks = tasks.filter((item) => item.id !== taskToRemove.id);
     setTasks(updatedTasks);
 
