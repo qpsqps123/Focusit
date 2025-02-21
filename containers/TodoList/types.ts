@@ -5,7 +5,7 @@ export interface Tasks {
   task: string;
 }
 
-export interface Props {
+export interface TodoListProps {
   tasks: Array<Tasks>;
   setTasks: Dispatch<SetStateAction<Array<Tasks>>>;
 }

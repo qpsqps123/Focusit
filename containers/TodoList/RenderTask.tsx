@@ -3,9 +3,9 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { todoListStorage } from "@/store/store";
 import { useFonts } from "expo-font";
 import { YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
-import { Props, Tasks } from "./types";
+import { TodoListProps, Tasks } from "./types";
 
-export default function RenderTask({ tasks, setTasks }: Props) {
+export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   let [fontsLoaded] = useFonts({
     YeonSung_400Regular,
   });

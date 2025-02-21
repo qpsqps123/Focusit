@@ -5,9 +5,9 @@ import { theme } from "@/styles/variables";
 import uuid from "react-native-uuid";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
-import { Props } from "./types";
+import { TodoListProps } from "./types";
 
-export default function AddTask({ tasks, setTasks }: Props) {
+export default function AddTask({ tasks, setTasks }: TodoListProps) {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
 
   let [fontsLoaded] = useFonts({
