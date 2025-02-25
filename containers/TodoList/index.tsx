@@ -4,10 +4,10 @@ import RenderTask from "./RenderTask";
 import { theme } from "@/styles/variables";
 import { todoListStorage } from "@/store/store";
 import { useState } from "react";
-import { ITodoList } from "./types";
+import { Tasks } from "./types";
 
 export default function TodoList() {
-  const [tasks, setTasks] = useState<ITodoList[]>(() => {
+  const [tasks, setTasks] = useState<Tasks[]>(() => {
     return JSON.parse(todoListStorage.getString("tasks") ?? "[]");
   });
   return (
