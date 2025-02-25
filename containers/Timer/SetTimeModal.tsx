@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { SetTimeModalProps, TimerProps } from "./types";
+import { SetTimeModalProps } from "./types";
 
 export default function SetTimeModal({
   timerTimeSettingVisible,
