@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { theme } from "@/styles/variables";
 import uuid from "react-native-uuid";
@@ -6,15 +6,29 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps } from "./types";
 import { setData } from "@/store/store";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 export default function AddTask({ tasks, setTasks }: TodoListProps) {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
 
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontsError] = useFonts({
     YeonSung_400Regular,
   });
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    if (fontsLoaded || fontsError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontsError]);
+
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
 

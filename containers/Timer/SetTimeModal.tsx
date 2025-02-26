@@ -17,11 +17,11 @@ export default function SetTimeModal({
   setTimerMinutes,
   handleTimerTimeSettingVisible,
 }: SetTimeModalProps) {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontsError] = useFonts({
     YeonSung_400Regular,
   });
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
   return (

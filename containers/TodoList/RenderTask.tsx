@@ -4,13 +4,28 @@ import { setData } from "@/store/store";
 import { useFonts } from "expo-font";
 import { YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps, Tasks } from "./types";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+
+SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontsError] = useFonts({
     YeonSung_400Regular,
   });
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    if (fontsLoaded || fontsError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontsError]);
+
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
 

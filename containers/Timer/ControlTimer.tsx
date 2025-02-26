@@ -14,13 +14,9 @@ export default function ControlTimer({
   setTimerSeconds,
   handleTimerTimeSettingVisible,
 }: ControlTimerProps) {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontsError] = useFonts({
     B612Mono_400Regular,
   });
-
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const handleTimerExecution = () => {
     setIsRunning(!isRunning);
@@ -31,6 +27,10 @@ export default function ControlTimer({
     setTimerMinutes(initMinutes);
     setTimerSeconds(0);
   };
+
+  if (!fontsLoaded && !fontsError) {
+    return null;
+  }
 
   return (
     <View style={styles.timerContainer}>

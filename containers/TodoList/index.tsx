@@ -7,19 +7,33 @@ import { Tasks } from "./types";
 import { getData } from "@/store/store";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
 
 export default function TodoList() {
   const [tasks, setTasks] = useState<Tasks[]>([]);
+
+  const [fontsLoaded, fontsError] = useFonts({
+    KaushanScript_400Regular,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontsError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontsError]);
 
   useEffect(() => {
     getData("tasks").then((value) => setTasks(JSON.parse(value ?? "[]")));
   }, []);
 
-  let [fontsLoaded] = useFonts({
-    KaushanScript_400Regular,
-  });
-
-  if (!fontsLoaded) {
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
 

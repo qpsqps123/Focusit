@@ -14,6 +14,10 @@ export default function Timer() {
   const [initMinutes, setInitMinutes] = useState(50);
   const [timerTimeSettingVisible, setTimerTimeSettingVisible] = useState(false);
 
+  const [fontsLoaded, fontsError] = useFonts({
+    KaushanScript_400Regular,
+  });
+
   useEffect(() => {
     if (isRunning === false) return;
     if (timerMinutes <= 0 && timerSeconds <= 0) {
@@ -34,11 +38,7 @@ export default function Timer() {
     return () => clearInterval(timeId);
   }, [isRunning, timerSeconds, timerMinutes]);
 
-  let [fontsLoaded] = useFonts({
-    KaushanScript_400Regular,
-  });
-
-  if (!fontsLoaded) {
+  if (!fontsLoaded && !fontsError) {
     return null;
   }
 
