@@ -3,9 +3,15 @@
     "name": "Focusit",
     "slug": "focusit",
     "scheme": "focusit",
+    "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#69247c"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -29,17 +35,6 @@
         "projectId": "e9d60dc2-ba17-4724-849a-e6010b2c2f91"
       }
     },
-    "plugins": [
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#69247c",
-          "image": "./assets/splash.png",
-          "resizeMode": "contain"
-        }
-      ]
-    ]
+    "plugins": []
   }
 }
-    "scheme": "focusit",
-    "newArchEnabled": true,
