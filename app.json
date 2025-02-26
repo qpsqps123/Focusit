@@ -30,17 +30,6 @@
     },
     "plugins": [
       [
-        "expo-build-properties",
-        {
-          "ios": {
-            "newArchEnabled": true
-          },
-          "android": {
-            "newArchEnabled": true
-          }
-        }
-      ],
-      [
         "expo-splash-screen",
         {
           "backgroundColor": "#69247c",
@@ -51,3 +40,5 @@
     ]
   }
 }
+    "scheme": "focusit",
+    "newArchEnabled": true,
