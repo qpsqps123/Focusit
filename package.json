@@ -44,6 +44,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@expo-google-fonts/b612-mono": "^0.2.3",
+    "@expo-google-fonts/jua": "^0.2.3",
     "@expo-google-fonts/kaushan-script": "^0.2.3",
     "@expo-google-fonts/yeon-sung": "^0.2.3",
     "@react-native-community/cli": "latest",
