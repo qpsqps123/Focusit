@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { theme } from "@/styles/variables";
 import { useFonts } from "@expo-google-fonts/yeon-sung";
+import { Jua_400Regular } from "@expo-google-fonts/jua";
 import { B612Mono_400Regular } from "@expo-google-fonts/b612-mono";
 import { ControlTimerProps } from "./types";
 
@@ -16,6 +17,7 @@ export default function ControlTimer({
 }: ControlTimerProps) {
   const [fontsLoaded, fontsError] = useFonts({
     B612Mono_400Regular,
+    Jua_400Regular,
   });
 
   const handleTimerExecution = () => {
@@ -132,7 +134,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.$white,
   },
   timerControlBtnsText: {
-    fontSize: 22,
-    fontFamily: "YeonSung_400Regular",
+    fontSize: 19,
+    color: theme.$darkGray,
+    fontFamily: "Jua_400Regular",
   },
 });

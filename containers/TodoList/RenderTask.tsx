@@ -1,14 +1,13 @@
 import { theme } from "@/styles/variables";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { setData } from "@/store/store";
-import { useFonts } from "expo-font";
-import { YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps, Tasks } from "./types";
-import { useEffect } from "react";
+import { useFonts } from "expo-font";
+import { Jua_400Regular } from "@expo-google-fonts/jua";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
-    YeonSung_400Regular,
+    Jua_400Regular,
   });
 
   const handleRemoveTask = (taskToRemove: Tasks) => {
@@ -55,12 +54,14 @@ const styles = StyleSheet.create({
   },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 13,
     borderRadius: 10,
   },
   renderTaskText: {
-    fontSize: 20,
-    color: theme.$black,
-    fontFamily: "YeonSung_400Regular",
+    fontSize: 19,
+    color: theme.$darkGray,
+    fontFamily: "Jua_400Regular",
+    lineHeight: 25,
   },
 });

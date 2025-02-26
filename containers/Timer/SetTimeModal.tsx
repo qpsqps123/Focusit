@@ -1,5 +1,4 @@
 import { theme } from "@/styles/variables";
-import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import {
   Modal,
   Pressable,
@@ -9,6 +8,8 @@ import {
   View,
 } from "react-native";
 import { SetTimeModalProps } from "./types";
+import { useFonts } from "expo-font";
+import { Jua_400Regular } from "@expo-google-fonts/jua";
 
 export default function SetTimeModal({
   timerTimeSettingVisible,
@@ -18,7 +19,7 @@ export default function SetTimeModal({
   handleTimerTimeSettingVisible,
 }: SetTimeModalProps) {
   const [fontsLoaded, fontsError] = useFonts({
-    YeonSung_400Regular,
+    Jua_400Regular,
   });
 
   if (!fontsLoaded && !fontsError) {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   timerTimeSettingTextInput: {
     fontSize: 36,
     color: theme.$darkGray,
-    fontFamily: "YeonSung_400Regular",
+    fontFamily: "Jua_400Regular",
     width: "100%",
     textAlign: "center",
   },
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
   },
   timerTimeSettingApplyBtnText: {
-    fontSize: 22,
+    fontSize: 20,
     color: theme.$darkGray,
-    fontFamily: "YeonSung_400Regular",
+    fontFamily: "Jua_400Regular",
   },
 });

@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { theme } from "@/styles/variables";
 import uuid from "react-native-uuid";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps } from "./types";
 import { setData } from "@/store/store";
+import { Jua_400Regular } from "@expo-google-fonts/jua";
+import { useFonts } from "expo-font";
 
 export default function AddTask({ tasks, setTasks }: TodoListProps) {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
 
   const [fontsLoaded, fontsError] = useFonts({
-    YeonSung_400Regular,
+    Jua_400Regular,
   });
 
   const handleAddTaskInputChange = (newText: string) => {
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     width: 220,
     height: 50,
-    fontFamily: "YeonSung_400Regular",
+    fontFamily: "Jua_400Regular",
     borderBottomWidth: 2,
     borderBottomColor: "rgba(255,255,255,0.2)",
   },

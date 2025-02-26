@@ -4,6 +4,6 @@ export const theme = {
   $white: "#eee",
   $black: "#111",
   $gray: "#aaa",
-  $darkGray: "#333",
+  $darkGray: "#222",
   $red: "#f15f5f",
 };
