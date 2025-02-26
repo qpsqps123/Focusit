@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
-import { todoListStorage } from "@/store/store";
 import { theme } from "@/styles/variables";
 import uuid from "react-native-uuid";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useFonts, YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps } from "./types";
+import { setData } from "@/store/store";
 
 export default function AddTask({ tasks, setTasks }: TodoListProps) {
   const [addTaskInputValue, setAddTaskInputValue] = useState("");
@@ -28,7 +28,7 @@ export default function AddTask({ tasks, setTasks }: TodoListProps) {
     const newTask = { id: uuid.v4(), task: addTaskInputValue };
     const updatedTasks = [...tasks, newTask];
 
-    todoListStorage.set("tasks", JSON.stringify(updatedTasks));
+    setData("tasks", JSON.stringify(updatedTasks));
 
     setTasks(updatedTasks);
     setAddTaskInputValue("");

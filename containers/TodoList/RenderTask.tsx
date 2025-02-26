@@ -1,6 +1,6 @@
 import { theme } from "@/styles/variables";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { todoListStorage } from "@/store/store";
+import { setData } from "@/store/store";
 import { useFonts } from "expo-font";
 import { YeonSung_400Regular } from "@expo-google-fonts/yeon-sung";
 import { TodoListProps, Tasks } from "./types";
@@ -18,7 +18,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     const updatedTasks = tasks.filter((item) => item.id !== taskToRemove.id);
     setTasks(updatedTasks);
 
-    todoListStorage.set("tasks", JSON.stringify(updatedTasks));
+    setData("tasks", JSON.stringify(updatedTasks));
   };
 
   return (
