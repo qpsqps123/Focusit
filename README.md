@@ -1,50 +1,26 @@
-# Welcome to your Expo app 👋
+# 🔥Focusit 🔥
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<strong>Focusit으로 집중력 UP! 간편한 할 일 목록과 타이머로 시간과 할 일을 관리하세요. 언제 어디서나 생산성 높이기!</strong>
 
-## Get started
+<p>
+<span>
+   <img src="https://github.com/user-attachments/assets/03b05c4a-de89-4be2-8c68-715c0da36ebf" width="200" height="auto" />&nbsp&nbsp&nbsp
+</span>
+<span>
+   <img src="https://github.com/user-attachments/assets/14bf83ee-2a57-4e9f-95fb-0e7915a7baea" width="200" height="auto" />&nbsp&nbsp&nbsp
+</span>
+<span>
+   <img src="https://github.com/user-attachments/assets/3555e880-af97-45b1-8cb0-dadfcd30535a" width="200" height="auto" />&nbsp&nbsp&nbsp
+</span>
+<span>
+   <img src="https://github.com/user-attachments/assets/f753e7b1-5e3f-4227-abf0-cd41e79bedea" width="200" height="auto" />&nbsp&nbsp&nbsp
+</span>
+</p>
 
-1. Install dependencies
+Focusit으로 하루를 생산성 있게 관리하세요! 깔끔한 할 일 목록과 타이머가 결합된 이 앱은 집중력을 높이고 일을 효율적으로 끝낼 수 있게 도와줍니다. 업무, 공부, 집안일 등 할 일들을 추가하고 하나씩 달성해가는 기쁨을 느껴보세요.
 
-   ```bash
-   npm install
-   ```
+<br />
 
-2. Start the app
+배포 주소 : [링크](https://apps.apple.com/us/app/focusit-할-일-목록-타이머/id6742450811?ppid=a5d8ef56-6756-458a-9af9-1d1e0ed399ed)
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+개인정보 처리방침 : [국문](https://sites.google.com/view/focusit-privacy-policy-ko/%ED%99%88), [영문](https://sites.google.com/view/focusit-privacy-policy-en/%ED%99%88)
