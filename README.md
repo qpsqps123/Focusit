@@ -1,7 +1,5 @@
 # 🔥Focusit 🔥
 
-<strong>Focusit으로 집중력 UP! 간편한 할 일 목록과 타이머로 시간과 할 일을 관리하세요. 언제 어디서나 생산성 높이기!</strong>
-
 <p>
 <span>
    <img src="https://github.com/user-attachments/assets/03b05c4a-de89-4be2-8c68-715c0da36ebf" width="180" height="auto" />&nbsp&nbsp&nbsp
