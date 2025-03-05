@@ -4,6 +4,7 @@ import { setData } from "@/store/store";
 import { TodoListProps, Tasks } from "./types";
 import { useFonts } from "expo-font";
 import { Jua_400Regular } from "@expo-google-fonts/jua";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
@@ -34,7 +35,24 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
             ]}
             onPress={() => handleRemoveTask(item)}
           >
-            <Text style={styles.renderTaskText}>{item.task}</Text>
+            <View style={styles.renderTask}>
+              <Text style={styles.renderTaskText}>{item.task}</Text>
+              <Pressable>
+                <MaterialCommunityIcons
+                  name="menu-down"
+                  size={24}
+                  color="black"
+                />
+              </Pressable>
+              <View style={styles.renderTaskMenu}>
+                <Pressable style={styles.renderTaskMenuBtns}>
+                  <Text style={styles.renderTaskMenuText}>Edit</Text>
+                </Pressable>
+                <Pressable style={styles.renderTaskMenuBtns}>
+                  <Text style={styles.renderTaskMenuText}>Delete</Text>
+                </Pressable>
+              </View>
+            </View>
           </Pressable>
         )}
         contentContainerStyle={styles.renderTaskList}
@@ -58,10 +76,29 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     borderRadius: 10,
   },
+  renderTask: {
+    flexDirection: "row",
+    gap: 5,
+  },
   renderTaskText: {
     fontSize: 19,
     color: theme.$darkGray,
     fontFamily: "Jua_400Regular",
     lineHeight: 25,
+    flex: 1,
+  },
+  renderTaskMenu: {
+    backgroundColor: theme.$white,
+    borderRadius: 10,
+    position: "absolute",
+    top: 28,
+    right: 0,
+  },
+  renderTaskMenuBtns: {
+    paddingHorizontal: 30,
+    paddingVertical: 18,
+  },
+  renderTaskMenuText: {
+    fontFamily: "Jua_400Regular",
   },
 });
