@@ -15,7 +15,9 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   });
 
   const handleRemoveTask = (taskToRemove: Tasks) => {
-    const updatedTasks = tasks.filter((item) => item.id !== taskToRemove.id);
+    const updatedTasks = tasks.filter(
+      (taskElement) => taskElement.id !== taskToRemove.id,
+    );
     setTasks(updatedTasks);
 
     setData("tasks", JSON.stringify(updatedTasks));
@@ -40,8 +42,8 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     <View style={styles.renderTaskWrapper}>
       <FlatList
         data={tasks}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+        keyExtractor={(taskElement) => taskElement.id}
+        renderItem={({ item: taskElement }) => (
           <View>
             <Pressable
               style={({ pressed }) => [
@@ -50,9 +52,9 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               ]}
             >
               <View style={styles.renderTask}>
-                <Text style={styles.renderTaskText}>{item.task}</Text>
+                <Text style={styles.renderTaskText}>{taskElement.task}</Text>
                 <Pressable
-                  onPress={() => handleMenuSwitch(item.id)}
+                  onPress={() => handleMenuSwitch(taskElement.id)}
                   style={styles.renderTaskMenuSwitch}
                 >
                   <MaterialCommunityIcons
@@ -63,14 +65,14 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                 </Pressable>
               </View>
             </Pressable>
-            {openedTaskMenuIds.includes(item.id) && (
+            {openedTaskMenuIds.includes(taskElement.id) && (
               <View style={styles.renderTaskMenu}>
                 <Pressable style={styles.renderTaskMenuBtns}>
                   <Text style={styles.renderTaskMenuText}>Edit</Text>
                 </Pressable>
                 <Pressable
                   style={styles.renderTaskMenuBtns}
-                  onPress={() => handleRemoveTask(item)}
+                  onPress={() => handleRemoveTask(taskElement)}
                 >
                   <Text style={styles.renderTaskMenuText}>Delete</Text>
                 </Pressable>
