@@ -42,7 +42,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.renderTaskContainer}>
+          <View>
             <Pressable
               style={({ pressed }) => [
                 styles.renderTaskBtn,
@@ -92,9 +92,7 @@ const styles = StyleSheet.create({
   },
   renderTaskList: {
     gap: 20,
-  },
-  renderTaskContainer: {
-    position: "relative",
+    height: "100%",
   },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
@@ -123,7 +121,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 50,
     right: 0,
-    zIndex: 3,
+    zIndex: 10,
+    elevation: 10,
   },
   renderTaskMenuBtns: {
     paddingHorizontal: 30,
