@@ -1,14 +1,26 @@
 import { theme } from "@/styles/variables";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { setData } from "@/store/store";
 import { TodoListProps, Tasks } from "./types";
 import { useFonts } from "expo-font";
 import { Jua_400Regular } from "@expo-google-fonts/jua";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
-  const [openedTaskMenuIds, setOpenedTaskMenuIds] = useState<Array<String>>([]);
+  const [openedTaskMenuIds, setOpenedTaskMenuIds] = useState<Array<string>>([]);
+  const [openedEditingTaskIds, setOpenedEditingTaskIds] = useState<
+    Array<string>
+  >([]);
+  const [inputValueToEditTaskText, setInputValueToEditTaskText] = useState("");
 
   const [fontsLoaded, fontsError] = useFonts({
     Jua_400Regular,
@@ -34,6 +46,51 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     }
   };
 
+  const handleOpenEditingTask = (taskToEdit: Tasks) => {
+    const taskIdToCloseTaskMenu = taskToEdit.id;
+    const filteredIds = openedTaskMenuIds.filter(
+      (openedTaskMenuId) => openedTaskMenuId !== taskIdToCloseTaskMenu,
+    );
+    setOpenedTaskMenuIds(filteredIds);
+
+    setOpenedEditingTaskIds([...openedEditingTaskIds, taskToEdit.id]);
+
+    setInputValueToEditTaskText(taskToEdit.task);
+  };
+
+  const handleInputChangeToEditTask = (newText: string) => {
+    setInputValueToEditTaskText(newText);
+  };
+
+  const handleApproveEditingTask = (taskIdToEditTaskText: string) => {
+    if (!inputValueToEditTaskText.trim()) return;
+
+    const updatedTasks = tasks.map((taskElement) => {
+      if (taskElement.id === taskIdToEditTaskText) {
+        taskElement.task = inputValueToEditTaskText;
+        return taskElement;
+      }
+      return taskElement;
+    });
+
+    setTasks(updatedTasks);
+
+    setData("tasks", JSON.stringify(updatedTasks));
+
+    const filteredIds = openedEditingTaskIds.filter(
+      (openedEditingTaskId) => openedEditingTaskId !== taskIdToEditTaskText,
+    );
+    setOpenedEditingTaskIds(filteredIds);
+  };
+
+  const handleCancelEditingTask = (taskIdToCancelEditingTask: string) => {
+    const filteredIds = openedEditingTaskIds.filter(
+      (openedEditingTaskId) =>
+        openedEditingTaskId !== taskIdToCancelEditingTask,
+    );
+    setOpenedEditingTaskIds(filteredIds);
+  };
+
   if (!fontsLoaded && !fontsError) {
     return null;
   }
@@ -52,22 +109,60 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               ]}
             >
               <View style={styles.renderTask}>
-                <Text style={styles.renderTaskText}>{taskElement.task}</Text>
-                <Pressable
-                  onPress={() => handleMenuSwitch(taskElement.id)}
-                  style={styles.renderTaskMenuSwitch}
-                >
-                  <MaterialCommunityIcons
-                    name="menu-down"
-                    size={28}
-                    color="black"
-                  />
-                </Pressable>
+                {openedEditingTaskIds.includes(taskElement.id) ? (
+                  <>
+                    <TextInput
+                      style={styles.inputToEditTaskText}
+                      onChangeText={(newText) =>
+                        handleInputChangeToEditTask(newText)
+                      }
+                      defaultValue={taskElement.task}
+                    />
+
+                    <Pressable
+                      style={styles.btnToApproveEditingTaskText}
+                      onPress={() => {
+                        handleApproveEditingTask(taskElement.id);
+                      }}
+                    >
+                      <Ionicons
+                        name="checkmark-sharp"
+                        size={28}
+                        color="black"
+                      />
+                    </Pressable>
+                    <Pressable
+                      style={styles.btnToCancelEditingTaskText}
+                      onPress={() => handleCancelEditingTask(taskElement.id)}
+                    >
+                      <Ionicons name="close" size={28} color="black" />
+                    </Pressable>
+                  </>
+                ) : (
+                  <>
+                    <Text style={styles.renderTaskText}>
+                      {taskElement.task}
+                    </Text>
+                    <Pressable
+                      onPress={() => handleMenuSwitch(taskElement.id)}
+                      style={styles.renderTaskMenuSwitch}
+                    >
+                      <MaterialCommunityIcons
+                        name="menu-down"
+                        size={28}
+                        color="black"
+                      />
+                    </Pressable>
+                  </>
+                )}
               </View>
             </Pressable>
             {openedTaskMenuIds.includes(taskElement.id) && (
               <View style={styles.renderTaskMenu}>
-                <Pressable style={styles.renderTaskMenuBtns}>
+                <Pressable
+                  style={styles.renderTaskMenuBtns}
+                  onPress={() => handleOpenEditingTask(taskElement)}
+                >
                   <Text style={styles.renderTaskMenuText}>Edit</Text>
                 </Pressable>
                 <Pressable
@@ -104,7 +199,23 @@ const styles = StyleSheet.create({
   },
   renderTask: {
     flexDirection: "row",
-    gap: 5,
+    gap: 15,
+  },
+  inputToEditTaskText: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.$darkGray,
+    fontFamily: "Jua_400Regular",
+    fontSize: 16,
+    color: theme.$darkGray,
+    flex: 1,
+  },
+  btnToApproveEditingTaskText: {
+    width: 28,
+    height: 28,
+  },
+  btnToCancelEditingTaskText: {
+    width: 28,
+    height: 28,
   },
   renderTaskText: {
     fontSize: 19,
