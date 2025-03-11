@@ -21,7 +21,6 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [openedEditingTaskIds, setOpenedEditingTaskIds] = useState<
     Array<string>
   >([]);
-  const [inputValueToEditTaskText, setInputValueToEditTaskText] = useState("");
   // const [taskCompleted, setTaskCompleted] = useState(false);
 
   const [fontsLoaded, fontsError] = useFonts({
@@ -57,30 +56,40 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
     setOpenedEditingTaskIds([...openedEditingTaskIds, taskToEdit.id]);
 
-    setInputValueToEditTaskText(taskToEdit.task);
+    setTasks(
+      tasks.map((task) =>
+        task.id === taskToEdit.id
+          ? { ...task, inputValueToEdit: taskToEdit.task }
+          : task,
+      ),
+    );
   };
 
-  const handleInputChangeToEditTask = (newText: string) => {
-    setInputValueToEditTaskText(newText);
+  const handleInputChangeToEditTask = (newText: string, taskToEdit: Tasks) => {
+    setTasks(
+      tasks.map((_task) =>
+        _task.id === taskToEdit.id
+          ? { ..._task, inputValueToEdit: newText }
+          : _task,
+      ),
+    );
   };
 
-  const handleApproveEditingTask = (taskIdToEditTaskText: string) => {
-    if (!inputValueToEditTaskText.trim()) return;
+  const handleApproveEditingTask = (taskToEdit: Tasks) => {
+    if (!taskToEdit.inputValueToEdit.trim()) return;
 
-    const updatedTasks = tasks.map((taskElement) => {
-      if (taskElement.id === taskIdToEditTaskText) {
-        taskElement.task = inputValueToEditTaskText;
-        return taskElement;
-      }
-      return taskElement;
-    });
+    const updatedTasks = tasks.map((_task) =>
+      _task.id === taskToEdit.id
+        ? { ..._task, task: taskToEdit.inputValueToEdit }
+        : _task,
+    );
 
     setTasks(updatedTasks);
 
     setData("tasks", JSON.stringify(updatedTasks));
 
     const filteredIds = openedEditingTaskIds.filter(
-      (openedEditingTaskId) => openedEditingTaskId !== taskIdToEditTaskText,
+      (openedEditingTaskId) => openedEditingTaskId !== taskToEdit.id,
     );
     setOpenedEditingTaskIds(filteredIds);
   };
@@ -125,7 +134,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                     <TextInput
                       style={styles.inputToEditTaskText}
                       onChangeText={(newText) =>
-                        handleInputChangeToEditTask(newText)
+                        handleInputChangeToEditTask(newText, taskElement)
                       }
                       defaultValue={taskElement.task}
                     />
@@ -133,7 +142,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                     <Pressable
                       style={styles.btnToApproveEditingTaskText}
                       onPress={() => {
-                        handleApproveEditingTask(taskElement.id);
+                        handleApproveEditingTask(taskElement);
                       }}
                     >
                       <Ionicons
