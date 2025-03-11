@@ -200,7 +200,6 @@ const styles = StyleSheet.create({
   },
   renderTaskList: {
     gap: 20,
-    height: "100%",
   },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
