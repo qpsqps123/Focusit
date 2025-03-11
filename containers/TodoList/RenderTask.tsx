@@ -14,6 +14,7 @@ import { Jua_400Regular } from "@expo-google-fonts/jua";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import Feather from "@expo/vector-icons/Feather";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [openedTaskMenuIds, setOpenedTaskMenuIds] = useState<Array<string>>([]);
@@ -21,6 +22,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     Array<string>
   >([]);
   const [inputValueToEditTaskText, setInputValueToEditTaskText] = useState("");
+  // const [taskCompleted, setTaskCompleted] = useState(false);
 
   const [fontsLoaded, fontsError] = useFonts({
     Jua_400Regular,
@@ -109,6 +111,15 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               ]}
             >
               <View style={styles.renderTask}>
+                {/* {!taskCompleted ? ( */}
+                {/*   <Text> */}
+                {/*     <Feather name="check-square" size={20} color="black" /> */}
+                {/*   </Text> */}
+                {/* ) : ( */}
+                <Text>
+                  <Feather name="square" size={20} color="black" />
+                </Text>
+                {/* )} */}
                 {openedEditingTaskIds.includes(taskElement.id) ? (
                   <>
                     <TextInput
