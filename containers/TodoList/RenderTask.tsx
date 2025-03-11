@@ -204,12 +204,13 @@ const styles = StyleSheet.create({
   renderTaskBtn: {
     backgroundColor: theme.$primary,
     paddingHorizontal: 20,
-    paddingVertical: 13,
+    paddingVertical: 12,
     borderRadius: 10,
   },
   renderTask: {
     flexDirection: "row",
     gap: 15,
+    alignItems: "baseline",
   },
   inputToEditTaskText: {
     borderBottomWidth: 1,
