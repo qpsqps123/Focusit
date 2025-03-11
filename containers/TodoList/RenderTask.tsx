@@ -28,9 +28,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   });
 
   const handleRemoveTask = (taskToRemove: Tasks) => {
-    const updatedTasks = tasks.filter(
-      (taskElement) => taskElement.id !== taskToRemove.id,
-    );
+    const updatedTasks = tasks.filter((_task) => _task.id !== taskToRemove.id);
     setTasks(updatedTasks);
 
     setData("tasks", JSON.stringify(updatedTasks));
@@ -57,10 +55,10 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     setOpenedEditingTaskIds([...openedEditingTaskIds, taskToEdit.id]);
 
     setTasks(
-      tasks.map((task) =>
-        task.id === taskToEdit.id
-          ? { ...task, inputValueToEdit: taskToEdit.task }
-          : task,
+      tasks.map((_task) =>
+        _task.id === taskToEdit.id
+          ? { ..._task, inputValueToEdit: taskToEdit.title }
+          : _task,
       ),
     );
   };
@@ -80,7 +78,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
     const updatedTasks = tasks.map((_task) =>
       _task.id === taskToEdit.id
-        ? { ..._task, task: taskToEdit.inputValueToEdit }
+        ? { ..._task, title: taskToEdit.inputValueToEdit }
         : _task,
     );
 
@@ -110,8 +108,8 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     <View style={styles.renderTaskWrapper}>
       <FlatList
         data={tasks}
-        keyExtractor={(taskElement) => taskElement.id}
-        renderItem={({ item: taskElement }) => (
+        keyExtractor={(_task) => _task.id}
+        renderItem={({ item: _task }) => (
           <View>
             <Pressable
               style={({ pressed }) => [
@@ -129,20 +127,20 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                   <Feather name="square" size={20} color="black" />
                 </Text>
                 {/* )} */}
-                {openedEditingTaskIds.includes(taskElement.id) ? (
+                {openedEditingTaskIds.includes(_task.id) ? (
                   <>
                     <TextInput
                       style={styles.inputToEditTaskText}
                       onChangeText={(newText) =>
-                        handleInputChangeToEditTask(newText, taskElement)
+                        handleInputChangeToEditTask(newText, _task)
                       }
-                      defaultValue={taskElement.task}
+                      defaultValue={_task.title}
                     />
 
                     <Pressable
                       style={styles.btnToApproveEditingTaskText}
                       onPress={() => {
-                        handleApproveEditingTask(taskElement);
+                        handleApproveEditingTask(_task);
                       }}
                     >
                       <Ionicons
@@ -153,18 +151,16 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                     </Pressable>
                     <Pressable
                       style={styles.btnToCancelEditingTaskText}
-                      onPress={() => handleCancelEditingTask(taskElement.id)}
+                      onPress={() => handleCancelEditingTask(_task.id)}
                     >
                       <Ionicons name="close" size={28} color="black" />
                     </Pressable>
                   </>
                 ) : (
                   <>
-                    <Text style={styles.renderTaskText}>
-                      {taskElement.task}
-                    </Text>
+                    <Text style={styles.renderTaskText}>{_task.title}</Text>
                     <Pressable
-                      onPress={() => handleMenuSwitch(taskElement.id)}
+                      onPress={() => handleMenuSwitch(_task.id)}
                       style={styles.renderTaskMenuSwitch}
                     >
                       <MaterialCommunityIcons
@@ -177,17 +173,17 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                 )}
               </View>
             </Pressable>
-            {openedTaskMenuIds.includes(taskElement.id) && (
+            {openedTaskMenuIds.includes(_task.id) && (
               <View style={styles.renderTaskMenu}>
                 <Pressable
                   style={styles.renderTaskMenuBtns}
-                  onPress={() => handleOpenEditingTask(taskElement)}
+                  onPress={() => handleOpenEditingTask(_task)}
                 >
                   <Text style={styles.renderTaskMenuText}>Edit</Text>
                 </Pressable>
                 <Pressable
                   style={styles.renderTaskMenuBtns}
-                  onPress={() => handleRemoveTask(taskElement)}
+                  onPress={() => handleRemoveTask(_task)}
                 >
                   <Text style={styles.renderTaskMenuText}>Delete</Text>
                 </Pressable>
