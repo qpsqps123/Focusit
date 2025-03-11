@@ -13,16 +13,9 @@ import { useFonts } from "expo-font";
 import { Jua_400Regular } from "@expo-google-fonts/jua";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
 import Feather from "@expo/vector-icons/Feather";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
-  const [openedTaskMenuIds, setOpenedTaskMenuIds] = useState<Array<string>>([]);
-  const [openedEditingTaskIds, setOpenedEditingTaskIds] = useState<
-    Array<string>
-  >([]);
-  // const [taskCompleted, setTaskCompleted] = useState(false);
-
   const [fontsLoaded, fontsError] = useFonts({
     Jua_400Regular,
   });
@@ -34,30 +27,26 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     setData("tasks", JSON.stringify(updatedTasks));
   };
 
-  const handleMenuSwitch = (taskId: string) => {
-    if (openedTaskMenuIds.includes(taskId)) {
-      const filteredIds = openedTaskMenuIds.filter(
-        (openedTaskMenuId) => openedTaskMenuId !== taskId,
-      );
-      setOpenedTaskMenuIds(filteredIds);
-    } else {
-      setOpenedTaskMenuIds([...openedTaskMenuIds, taskId]);
-    }
+  const handleMenuSwitch = (taskToOpenMenu: Tasks) => {
+    setTasks(
+      tasks.map((_task) =>
+        _task.id === taskToOpenMenu.id
+          ? { ..._task, isMenuOpen: !taskToOpenMenu.isMenuOpen }
+          : _task,
+      ),
+    );
   };
 
   const handleOpenEditingTask = (taskToEdit: Tasks) => {
-    const taskIdToCloseTaskMenu = taskToEdit.id;
-    const filteredIds = openedTaskMenuIds.filter(
-      (openedTaskMenuId) => openedTaskMenuId !== taskIdToCloseTaskMenu,
-    );
-    setOpenedTaskMenuIds(filteredIds);
-
-    setOpenedEditingTaskIds([...openedEditingTaskIds, taskToEdit.id]);
-
     setTasks(
       tasks.map((_task) =>
         _task.id === taskToEdit.id
-          ? { ..._task, inputValueToEdit: taskToEdit.title }
+          ? {
+              ..._task,
+              inputValueToEdit: taskToEdit.title,
+              isMenuOpen: false,
+              isEditing: true,
+            }
           : _task,
       ),
     );
@@ -78,26 +67,21 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
     const updatedTasks = tasks.map((_task) =>
       _task.id === taskToEdit.id
-        ? { ..._task, title: taskToEdit.inputValueToEdit }
+        ? { ..._task, title: taskToEdit.inputValueToEdit, isEditing: false }
         : _task,
     );
 
     setTasks(updatedTasks);
 
     setData("tasks", JSON.stringify(updatedTasks));
-
-    const filteredIds = openedEditingTaskIds.filter(
-      (openedEditingTaskId) => openedEditingTaskId !== taskToEdit.id,
-    );
-    setOpenedEditingTaskIds(filteredIds);
   };
 
-  const handleCancelEditingTask = (taskIdToCancelEditingTask: string) => {
-    const filteredIds = openedEditingTaskIds.filter(
-      (openedEditingTaskId) =>
-        openedEditingTaskId !== taskIdToCancelEditingTask,
+  const handleCancelEditingTask = (taskToCancel: Tasks) => {
+    setTasks(
+      tasks.map((_task) =>
+        _task.id === taskToCancel.id ? { ..._task, isEditing: false } : _task,
+      ),
     );
-    setOpenedEditingTaskIds(filteredIds);
   };
 
   if (!fontsLoaded && !fontsError) {
@@ -127,7 +111,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                   <Feather name="square" size={20} color="black" />
                 </Text>
                 {/* )} */}
-                {openedEditingTaskIds.includes(_task.id) ? (
+                {_task.isEditing ? (
                   <>
                     <TextInput
                       style={styles.inputToEditTaskText}
@@ -151,7 +135,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                     </Pressable>
                     <Pressable
                       style={styles.btnToCancelEditingTaskText}
-                      onPress={() => handleCancelEditingTask(_task.id)}
+                      onPress={() => handleCancelEditingTask(_task)}
                     >
                       <Ionicons name="close" size={28} color="black" />
                     </Pressable>
@@ -160,7 +144,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                   <>
                     <Text style={styles.renderTaskText}>{_task.title}</Text>
                     <Pressable
-                      onPress={() => handleMenuSwitch(_task.id)}
+                      onPress={() => handleMenuSwitch(_task)}
                       style={styles.renderTaskMenuSwitch}
                     >
                       <MaterialCommunityIcons
@@ -173,7 +157,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                 )}
               </View>
             </Pressable>
-            {openedTaskMenuIds.includes(_task.id) && (
+            {_task.isMenuOpen && (
               <View style={styles.renderTaskMenu}>
                 <Pressable
                   style={styles.renderTaskMenuBtns}

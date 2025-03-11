@@ -22,7 +22,13 @@ export default function AddTask({ tasks, setTasks }: TodoListProps) {
   const handleAddTask = () => {
     if (!addTaskInputValue.trim()) return;
 
-    const newTask = { id: uuid.v4(), task: addTaskInputValue };
+    const newTask = {
+      id: uuid.v4(),
+      title: addTaskInputValue,
+      inputValueToEdit: "",
+      isMenuOpen: false,
+      isEditing: false,
+    };
     const updatedTasks = [...tasks, newTask];
 
     setData("tasks", JSON.stringify(updatedTasks));
