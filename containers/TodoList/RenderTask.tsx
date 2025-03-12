@@ -199,6 +199,19 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
           </View>
         )}
         contentContainerStyle={styles.renderTaskList}
+        ListFooterComponent={
+          tasks.length ? (
+            <View style={styles.WIPImgContainer}>
+              <Image
+                source={require("@/assets/images/fire.png")}
+                style={styles.WIPImg}
+              />
+              <Text style={styles.WIPImgTitle}>You are on fire!</Text>
+            </View>
+          ) : (
+            <></>
+          )
+        }
       />
     </View>
   );
@@ -227,7 +240,6 @@ const styles = StyleSheet.create({
   },
   renderTaskList: {
     gap: 20,
-    height: "100%",
   },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
@@ -262,6 +274,22 @@ const styles = StyleSheet.create({
     fontFamily: "Jua_400Regular",
     lineHeight: 28,
     flex: 1,
+  },
+  WIPImgContainer: {
+    marginTop: 40,
+    marginBottom: 20,
+    alignItems: "center",
+    opacity: 0.4,
+    gap: 10,
+  },
+  WIPImg: {
+    width: 100,
+    height: 100,
+  },
+  WIPImgTitle: {
+    color: theme.$white,
+    fontSize: 19,
+    fontFamily: "Jua_400Regular",
   },
   renderTaskMenuSwitch: {
     width: 28,
