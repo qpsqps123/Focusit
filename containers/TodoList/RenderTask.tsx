@@ -1,6 +1,5 @@
 import { theme } from "@/styles/variables";
 import {
-  Alert,
   FlatList,
   Pressable,
   StyleSheet,
@@ -16,7 +15,8 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Image } from "expo-image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import LottieView from "lottie-react-native";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
@@ -25,11 +25,13 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   const [tasksAllCompleted, setTasksAllCompleted] = useState(false);
 
+  const confettiRef = useRef<LottieView>(null);
+
   useEffect(() => {
     const allCompleted = tasks.every((_task) => _task.isCompleted);
 
     if (allCompleted && tasks.length > 0) {
-      Alert.alert("축하합니다!", "모든 할 일이 끝났어요!");
+      confettiRef.current?.play(0);
     }
 
     setTasksAllCompleted(allCompleted);
@@ -115,128 +117,142 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   }
 
   return (
-    <View style={styles.renderTaskWrapper}>
-      {!tasks.length && (
-        <View style={styles.emptyTaskContainer}>
-          <Image
-            source={require("@/assets/images/no-task.png")}
-            style={styles.emptyTaskImg}
-          />
-          <Text style={styles.emptyTaskTitle}>Waiting to kick off...</Text>
-        </View>
-      )}
-      <FlatList
-        data={tasks}
-        keyExtractor={(_task) => _task.id}
-        renderItem={({ item: _task }) => (
-          <View>
-            <Pressable
-              style={({ pressed }) => [
-                styles.renderTaskBtn,
-                _task.isCompleted && { opacity: _task.isCompleted && 0.5 },
-                pressed && { opacity: 0.4 },
-              ]}
-              onPress={() => handleTaskCompletionSwitch(_task)}
-            >
-              <View style={styles.renderTask}>
-                {_task.isCompleted ? (
-                  <Text>
-                    <Feather name="check-square" size={24} color="black" />
-                  </Text>
-                ) : (
-                  <Text>
-                    <Feather name="square" size={24} color="black" />
-                  </Text>
-                )}
-                {_task.isEditing ? (
-                  <>
-                    <TextInput
-                      style={styles.inputToEditTaskText}
-                      onChangeText={(newText) =>
-                        handleInputChangeToEditTask(newText, _task)
-                      }
-                      defaultValue={_task.title}
-                    />
-
-                    <Pressable
-                      style={styles.btnToApproveEditingTaskText}
-                      onPress={() => {
-                        handleApproveEditingTask(_task);
-                      }}
-                    >
-                      <Ionicons
-                        name="checkmark-sharp"
-                        size={28}
-                        color="black"
-                      />
-                    </Pressable>
-                    <Pressable
-                      style={styles.btnToCancelEditingTaskText}
-                      onPress={() => handleCancelEditingTask(_task)}
-                    >
-                      <Ionicons name="close" size={28} color="black" />
-                    </Pressable>
-                  </>
-                ) : (
-                  <>
-                    <Text style={styles.renderTaskText}>{_task.title}</Text>
-                    <Pressable
-                      onPress={() => handleMenuSwitch(_task)}
-                      style={styles.renderTaskMenuSwitch}
-                    >
-                      <MaterialCommunityIcons
-                        name="menu-down"
-                        size={28}
-                        color="black"
-                      />
-                    </Pressable>
-                  </>
-                )}
-              </View>
-            </Pressable>
-            {_task.isMenuOpen && (
-              <View style={styles.renderTaskMenu}>
-                <Pressable
-                  style={styles.renderTaskMenuBtns}
-                  onPress={() => handleOpenEditingTask(_task)}
-                >
-                  <Text style={styles.renderTaskMenuText}>Edit</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.renderTaskMenuBtns}
-                  onPress={() => handleRemoveTask(_task)}
-                >
-                  <Text style={styles.renderTaskMenuText}>Delete</Text>
-                </Pressable>
-              </View>
-            )}
+    <>
+      <View style={styles.renderTaskWrapper}>
+        {!tasks.length && (
+          <View style={styles.emptyTaskContainer}>
+            <Image
+              source={require("@/assets/images/no-task.png")}
+              style={styles.emptyTaskImg}
+            />
+            <Text style={styles.emptyTaskTitle}>Waiting to kick off...</Text>
           </View>
         )}
-        contentContainerStyle={styles.renderTaskList}
-        ListFooterComponent={
-          <>
-            {tasksAllCompleted && tasks.length && (
-              <View style={styles.WIPImgContainer}>
-                <Image
-                  source={require("@/assets/images/task-done.png")}
-                  style={styles.WIPImg}
-                />
-                <Text style={styles.WIPImgTitle}>You nailed it!</Text>
-              </View>
-            )}
-            {!tasksAllCompleted && tasks.length && (
-              <View style={styles.WIPImgContainer}>
-                <Image
-                  source={require("@/assets/images/fire.png")}
-                  style={styles.WIPImg}
-                />
-                <Text style={styles.WIPImgTitle}>Let's roll!</Text>
-              </View>
-            )}
-          </>
-        }
+        <FlatList
+          data={tasks}
+          keyExtractor={(_task) => _task.id}
+          renderItem={({ item: _task }) => (
+            <View>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.renderTaskBtn,
+                  _task.isCompleted && { opacity: _task.isCompleted && 0.5 },
+                  pressed && { opacity: 0.4 },
+                ]}
+                onPress={() => handleTaskCompletionSwitch(_task)}
+              >
+                <View style={styles.renderTask}>
+                  {_task.isCompleted ? (
+                    <Text>
+                      <Feather name="check-square" size={24} color="black" />
+                    </Text>
+                  ) : (
+                    <Text>
+                      <Feather name="square" size={24} color="black" />
+                    </Text>
+                  )}
+                  {_task.isEditing ? (
+                    <>
+                      <TextInput
+                        style={styles.inputToEditTaskText}
+                        onChangeText={(newText) =>
+                          handleInputChangeToEditTask(newText, _task)
+                        }
+                        defaultValue={_task.title}
+                      />
+
+                      <Pressable
+                        style={styles.btnToApproveEditingTaskText}
+                        onPress={() => {
+                          handleApproveEditingTask(_task);
+                        }}
+                      >
+                        <Ionicons
+                          name="checkmark-sharp"
+                          size={28}
+                          color="black"
+                        />
+                      </Pressable>
+                      <Pressable
+                        style={styles.btnToCancelEditingTaskText}
+                        onPress={() => handleCancelEditingTask(_task)}
+                      >
+                        <Ionicons name="close" size={28} color="black" />
+                      </Pressable>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={styles.renderTaskText}>{_task.title}</Text>
+                      <Pressable
+                        onPress={() => handleMenuSwitch(_task)}
+                        style={styles.renderTaskMenuSwitch}
+                      >
+                        <MaterialCommunityIcons
+                          name="menu-down"
+                          size={28}
+                          color="black"
+                        />
+                      </Pressable>
+                    </>
+                  )}
+                </View>
+              </Pressable>
+              {_task.isMenuOpen && (
+                <View style={styles.renderTaskMenu}>
+                  <Pressable
+                    style={styles.renderTaskMenuBtns}
+                    onPress={() => handleOpenEditingTask(_task)}
+                  >
+                    <Text style={styles.renderTaskMenuText}>Edit</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.renderTaskMenuBtns}
+                    onPress={() => handleRemoveTask(_task)}
+                  >
+                    <Text style={styles.renderTaskMenuText}>Delete</Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
+          )}
+          contentContainerStyle={styles.renderTaskList}
+          ListFooterComponent={
+            <>
+              {tasksAllCompleted && tasks.length ? (
+                <View style={styles.WIPImgContainer}>
+                  <Image
+                    source={require("@/assets/images/task-done.png")}
+                    style={styles.WIPImg}
+                  />
+                  <Text style={styles.WIPImgTitle}>You nailed it!</Text>
+                </View>
+              ) : (
+                <></>
+              )}
+              {!tasksAllCompleted && tasks.length ? (
+                <View style={styles.WIPImgContainer}>
+                  <Image
+                    source={require("@/assets/images/fire.png")}
+                    style={styles.WIPImg}
+                  />
+                  <Text style={styles.WIPImgTitle}>Let's roll!</Text>
+                </View>
+              ) : (
+                <></>
+              )}
+            </>
+          }
+        />
+      </View>
+      <LottieView
+        ref={confettiRef}
+        source={require("@/assets/animations/confetti.json")}
+        autoPlay={false}
+        loop={false}
+        style={styles.confetti}
+        resizeMode="cover"
       />
-    </View>
+    </>
   );
 }
 
@@ -333,5 +349,14 @@ const styles = StyleSheet.create({
   },
   renderTaskMenuText: {
     fontFamily: "Jua_400Regular",
+  },
+  confetti: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 1000,
+    pointerEvents: "none",
   },
 });
