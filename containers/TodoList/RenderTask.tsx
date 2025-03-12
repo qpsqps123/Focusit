@@ -14,6 +14,7 @@ import { Jua_400Regular } from "@expo-google-fonts/jua";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
+import { Image } from "expo-image";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
@@ -101,6 +102,15 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   return (
     <View style={styles.renderTaskWrapper}>
+      {!tasks.length && (
+        <View style={styles.emptyTaskContainer}>
+          <Image
+            source={require("@/assets/images/no-task.png")}
+            style={styles.emptyTaskImg}
+          />
+          <Text style={styles.emptyTaskTitle}>Waiting to kick off!</Text>
+        </View>
+      )}
       <FlatList
         data={tasks}
         keyExtractor={(_task) => _task.id}
@@ -200,8 +210,24 @@ const styles = StyleSheet.create({
     marginTop: 80,
     width: "80%",
   },
+  emptyTaskContainer: {
+    opacity: 0.4,
+    alignItems: "center",
+    gap: 20,
+  },
+  emptyTaskImg: {
+    marginLeft: 30,
+    width: 150,
+    height: 150,
+  },
+  emptyTaskTitle: {
+    color: theme.$white,
+    fontFamily: "Jua_400Regular",
+    fontSize: 22,
+  },
   renderTaskList: {
     gap: 20,
+    height: "100%",
   },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
