@@ -24,14 +24,20 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   });
 
   const [tasksAllCompleted, setTasksAllCompleted] = useState(false);
+  const [confettiPlayed, setConfettiPlayed] = useState(false);
 
   const confettiRef = useRef<LottieView>(null);
 
   useEffect(() => {
     const allCompleted = tasks.every((_task) => _task.isCompleted);
 
-    if (allCompleted && tasks.length > 0) {
+    if (!confettiPlayed && allCompleted && tasks.length > 0) {
       confettiRef.current?.play(0);
+      setConfettiPlayed(true);
+    }
+
+    if (!allCompleted) {
+      setConfettiPlayed(false);
     }
 
     setTasksAllCompleted(allCompleted);
