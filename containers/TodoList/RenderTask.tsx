@@ -206,7 +206,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                 source={require("@/assets/images/fire.png")}
                 style={styles.WIPImg}
               />
-              <Text style={styles.WIPImgTitle}>You are on fire!</Text>
+              <Text style={styles.WIPImgTitle}>Let's roll!</Text>
             </View>
           ) : (
             <></>
