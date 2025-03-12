@@ -1,5 +1,6 @@
 import { theme } from "@/styles/variables";
 import {
+  Alert,
   FlatList,
   Pressable,
   StyleSheet,
@@ -15,11 +16,24 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Image } from "expo-image";
+import { useEffect, useState } from "react";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
     Jua_400Regular,
   });
+
+  const [tasksAllCompleted, setTasksAllCompleted] = useState(false);
+
+  useEffect(() => {
+    const allCompleted = tasks.every((_task) => _task.isCompleted);
+
+    if (allCompleted && tasks.length > 0) {
+      Alert.alert("축하합니다!", "모든 할 일이 끝났어요!");
+    }
+
+    setTasksAllCompleted(allCompleted);
+  }, [tasks]);
 
   const handleTaskCompletionSwitch = (taskToToggle: Tasks) => {
     const updatedTasks = tasks.map((_task) =>
@@ -200,17 +214,26 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
         )}
         contentContainerStyle={styles.renderTaskList}
         ListFooterComponent={
-          tasks.length ? (
-            <View style={styles.WIPImgContainer}>
-              <Image
-                source={require("@/assets/images/fire.png")}
-                style={styles.WIPImg}
-              />
-              <Text style={styles.WIPImgTitle}>Let's roll!</Text>
-            </View>
-          ) : (
-            <></>
-          )
+          <>
+            {tasksAllCompleted && tasks.length && (
+              <View style={styles.WIPImgContainer}>
+                <Image
+                  source={require("@/assets/images/task-done.png")}
+                  style={styles.WIPImg}
+                />
+                <Text style={styles.WIPImgTitle}>You nailed it!</Text>
+              </View>
+            )}
+            {!tasksAllCompleted && tasks.length && (
+              <View style={styles.WIPImgContainer}>
+                <Image
+                  source={require("@/assets/images/fire.png")}
+                  style={styles.WIPImg}
+                />
+                <Text style={styles.WIPImgTitle}>Let's roll!</Text>
+              </View>
+            )}
+          </>
         }
       />
     </View>
