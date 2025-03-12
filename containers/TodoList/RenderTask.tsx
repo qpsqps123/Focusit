@@ -108,7 +108,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
             source={require("@/assets/images/no-task.png")}
             style={styles.emptyTaskImg}
           />
-          <Text style={styles.emptyTaskTitle}>Waiting to kick off!</Text>
+          <Text style={styles.emptyTaskTitle}>Waiting to kick off...</Text>
         </View>
       )}
       <FlatList
@@ -230,13 +230,13 @@ const styles = StyleSheet.create({
   },
   emptyTaskImg: {
     marginLeft: 30,
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
   },
   emptyTaskTitle: {
     color: theme.$white,
     fontFamily: "Jua_400Regular",
-    fontSize: 22,
+    fontSize: 19,
   },
   renderTaskList: {
     gap: 20,
