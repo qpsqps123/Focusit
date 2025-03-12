@@ -28,6 +28,7 @@ export default function AddTask({ tasks, setTasks }: TodoListProps) {
       inputValueToEdit: "",
       isMenuOpen: false,
       isEditing: false,
+      isCompleted: false,
     };
     const updatedTasks = [...tasks, newTask];
 

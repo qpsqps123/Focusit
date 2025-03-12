@@ -20,6 +20,17 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     Jua_400Regular,
   });
 
+  const handleTaskCompletionSwitch = (taskToToggle: Tasks) => {
+    const updatedTasks = tasks.map((_task) =>
+      _task.id === taskToToggle.id
+        ? { ..._task, isCompleted: !taskToToggle.isCompleted }
+        : _task,
+    );
+    setTasks(updatedTasks);
+
+    setData("tasks", JSON.stringify(updatedTasks));
+  };
+
   const handleRemoveTask = (taskToRemove: Tasks) => {
     const updatedTasks = tasks.filter((_task) => _task.id !== taskToRemove.id);
     setTasks(updatedTasks);
@@ -98,19 +109,21 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
             <Pressable
               style={({ pressed }) => [
                 styles.renderTaskBtn,
-                { opacity: pressed ? 0.7 : 1 },
+                _task.isCompleted && { opacity: _task.isCompleted && 0.5 },
+                pressed && { opacity: 0.4 },
               ]}
+              onPress={() => handleTaskCompletionSwitch(_task)}
             >
               <View style={styles.renderTask}>
-                {/* {!taskCompleted ? ( */}
-                {/*   <Text> */}
-                {/*     <Feather name="check-square" size={20} color="black" /> */}
-                {/*   </Text> */}
-                {/* ) : ( */}
-                <Text>
-                  <Feather name="square" size={20} color="black" />
-                </Text>
-                {/* )} */}
+                {_task.isCompleted ? (
+                  <Text>
+                    <Feather name="check-square" size={24} color="black" />
+                  </Text>
+                ) : (
+                  <Text>
+                    <Feather name="square" size={24} color="black" />
+                  </Text>
+                )}
                 {_task.isEditing ? (
                   <>
                     <TextInput
@@ -193,13 +206,13 @@ const styles = StyleSheet.create({
   renderTaskBtn: {
     backgroundColor: theme.$primary,
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 10,
   },
   renderTask: {
     flexDirection: "row",
     gap: 15,
-    alignItems: "baseline",
+    alignItems: "stretch",
   },
   inputToEditTaskText: {
     borderBottomWidth: 1,
@@ -221,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     color: theme.$darkGray,
     fontFamily: "Jua_400Regular",
-    lineHeight: 25,
+    lineHeight: 28,
     flex: 1,
   },
   renderTaskMenuSwitch: {

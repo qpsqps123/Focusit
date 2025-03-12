@@ -6,6 +6,7 @@ export interface Tasks {
   inputValueToEdit: string;
   isMenuOpen: boolean;
   isEditing: boolean;
+  isCompleted: boolean;
 }
 
 export interface TodoListProps {
