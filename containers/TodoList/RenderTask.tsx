@@ -124,6 +124,14 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   return (
     <>
+      <LottieView
+        ref={confettiRef}
+        source={require("@/assets/animations/confetti.json")}
+        autoPlay={false}
+        loop={false}
+        style={styles.confetti}
+        resizeMode="cover"
+      />
       <View style={styles.renderTaskWrapper}>
         {!tasks.length && (
           <View style={styles.emptyTaskContainer}>
@@ -250,14 +258,6 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
           }
         />
       </View>
-      <LottieView
-        ref={confettiRef}
-        source={require("@/assets/animations/confetti.json")}
-        autoPlay={false}
-        loop={false}
-        style={styles.confetti}
-        resizeMode="cover"
-      />
     </>
   );
 }
@@ -362,7 +362,5 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 1000,
-    pointerEvents: "none",
   },
 });
