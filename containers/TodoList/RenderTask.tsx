@@ -25,14 +25,20 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   const [tasksAllCompleted, setTasksAllCompleted] = useState(false);
   const [confettiPlayed, setConfettiPlayed] = useState(false);
+  const [confettiIsPlaying, setConfettiIsPlaying] = useState(false);
 
   const confettiRef = useRef<LottieView>(null);
+
+  const handleConfettiAniFinished = (_isPlaying: boolean) => {
+    setConfettiIsPlaying(_isPlaying);
+  };
 
   useEffect(() => {
     const allCompleted = tasks.every((_task) => _task.isCompleted);
 
     if (!confettiPlayed && allCompleted && tasks.length > 0) {
       confettiRef.current?.play(0);
+      setConfettiIsPlaying(true);
       setConfettiPlayed(true);
     }
 
@@ -129,8 +135,15 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
         source={require("@/assets/animations/confetti.json")}
         autoPlay={false}
         loop={false}
-        style={styles.confetti}
+        style={[
+          styles.confetti,
+          {
+            zIndex: confettiIsPlaying ? 1000 : 0,
+            elevation: confettiIsPlaying ? 1000 : 0,
+          },
+        ]}
         resizeMode="cover"
+        onAnimationFinish={handleConfettiAniFinished}
       />
       <View style={styles.renderTaskWrapper}>
         {!tasks.length && (
