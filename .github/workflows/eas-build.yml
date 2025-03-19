@@ -15,7 +15,8 @@ jobs:
         with:
           node-version: 18.x
           cache: pnpm  
-          cache-dependency-path: pnpm-lock.yaml
+      - name: Install pnpm 
+        run: npm install -g pnpm
       - name: Clear npm cache        
         run: |
           npm cache clean --force
