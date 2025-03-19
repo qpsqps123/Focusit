@@ -15,13 +15,6 @@ jobs:
         with:
           node-version: 18.x
           cache: pnpm  
-      - name: Install pnpm 
-        run: npm install -g pnpm
-      - name: Clear npm cache        
-        run: |
-          npm cache clean --force
-          rm -rf ~/.pnpm-store         
-          rm -rf node_modules 
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v8
         with:
