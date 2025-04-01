@@ -1,12 +1,5 @@
 import { theme } from "@/styles/variables";
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { setData } from "@/store/store";
 import { TodoListProps, Tasks } from "./types";
 import { useFonts } from "expo-font";
@@ -29,14 +22,12 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   const confettiRef = useRef<LottieView>(null);
 
-  const handleConfettiAniFinished = (_isPlaying: boolean) => {
-    setConfettiIsPlaying(_isPlaying);
-  };
+  const hasTasksLeft = tasks.length > 0;
 
   useEffect(() => {
     const allCompleted = tasks.every((_task) => _task.isCompleted);
 
-    if (!confettiPlayed && allCompleted && tasks.length > 0) {
+    if (allCompleted && hasTasksLeft && !confettiPlayed) {
       confettiRef.current?.play(0);
       setConfettiIsPlaying(true);
       setConfettiPlayed(true);
@@ -47,13 +38,19 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
     }
 
     setTasksAllCompleted(allCompleted);
-  }, [tasks]);
+  }, [tasks, hasTasksLeft, confettiPlayed]);
+
+  useEffect(() => {
+    setConfettiIsPlaying(false);
+  }, []);
+
+  const handleConfettiAniFinished = () => {
+    setConfettiIsPlaying(false);
+  };
 
   const handleTaskCompletionSwitch = (taskToToggle: Tasks) => {
     const updatedTasks = tasks.map((_task) =>
-      _task.id === taskToToggle.id
-        ? { ..._task, isCompleted: !taskToToggle.isCompleted }
-        : _task,
+      _task.id === taskToToggle.id ? { ..._task, isCompleted: !taskToToggle.isCompleted } : _task
     );
     setTasks(updatedTasks);
 
@@ -69,11 +66,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 
   const handleMenuSwitch = (taskToOpenMenu: Tasks) => {
     setTasks(
-      tasks.map((_task) =>
-        _task.id === taskToOpenMenu.id
-          ? { ..._task, isMenuOpen: !taskToOpenMenu.isMenuOpen }
-          : _task,
-      ),
+      tasks.map((_task) => (_task.id === taskToOpenMenu.id ? { ..._task, isMenuOpen: !taskToOpenMenu.isMenuOpen } : _task))
     );
   };
 
@@ -87,28 +80,20 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               isMenuOpen: false,
               isEditing: true,
             }
-          : _task,
-      ),
+          : _task
+      )
     );
   };
 
   const handleInputChangeToEditTask = (newText: string, taskToEdit: Tasks) => {
-    setTasks(
-      tasks.map((_task) =>
-        _task.id === taskToEdit.id
-          ? { ..._task, inputValueToEdit: newText }
-          : _task,
-      ),
-    );
+    setTasks(tasks.map((_task) => (_task.id === taskToEdit.id ? { ..._task, inputValueToEdit: newText } : _task)));
   };
 
   const handleApproveEditingTask = (taskToEdit: Tasks) => {
     if (!taskToEdit.inputValueToEdit.trim()) return;
 
     const updatedTasks = tasks.map((_task) =>
-      _task.id === taskToEdit.id
-        ? { ..._task, title: taskToEdit.inputValueToEdit, isEditing: false }
-        : _task,
+      _task.id === taskToEdit.id ? { ..._task, title: taskToEdit.inputValueToEdit, isEditing: false } : _task
     );
 
     setTasks(updatedTasks);
@@ -117,11 +102,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   };
 
   const handleCancelEditingTask = (taskToCancel: Tasks) => {
-    setTasks(
-      tasks.map((_task) =>
-        _task.id === taskToCancel.id ? { ..._task, isEditing: false } : _task,
-      ),
-    );
+    setTasks(tasks.map((_task) => (_task.id === taskToCancel.id ? { ..._task, isEditing: false } : _task)));
   };
 
   if (!fontsLoaded && !fontsError) {
@@ -138,20 +119,17 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
         style={[
           styles.confetti,
           {
-            zIndex: confettiIsPlaying ? 1000 : 0,
-            elevation: confettiIsPlaying ? 1000 : 0,
+            zIndex: confettiIsPlaying === true ? 1000 : -1,
+            elevation: confettiIsPlaying === true ? 1000 : -1,
           },
         ]}
         resizeMode="cover"
         onAnimationFinish={handleConfettiAniFinished}
       />
       <View style={styles.renderTaskWrapper}>
-        {!tasks.length && (
+        {!hasTasksLeft && (
           <View style={styles.emptyTaskContainer}>
-            <Image
-              source={require("@/assets/images/no-task.png")}
-              style={styles.emptyTaskImg}
-            />
+            <Image source={require("@/assets/images/no-task.png")} style={styles.emptyTaskImg} />
             <Text style={styles.emptyTaskTitle}>Waiting to kick off...</Text>
           </View>
         )}
@@ -182,9 +160,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                     <>
                       <TextInput
                         style={styles.inputToEditTaskText}
-                        onChangeText={(newText) =>
-                          handleInputChangeToEditTask(newText, _task)
-                        }
+                        onChangeText={(newText) => handleInputChangeToEditTask(newText, _task)}
                         defaultValue={_task.title}
                       />
 
@@ -194,31 +170,17 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                           handleApproveEditingTask(_task);
                         }}
                       >
-                        <Ionicons
-                          name="checkmark-sharp"
-                          size={28}
-                          color="black"
-                        />
+                        <Ionicons name="checkmark-sharp" size={28} color="black" />
                       </Pressable>
-                      <Pressable
-                        style={styles.btnToCancelEditingTaskText}
-                        onPress={() => handleCancelEditingTask(_task)}
-                      >
+                      <Pressable style={styles.btnToCancelEditingTaskText} onPress={() => handleCancelEditingTask(_task)}>
                         <Ionicons name="close" size={28} color="black" />
                       </Pressable>
                     </>
                   ) : (
                     <>
                       <Text style={styles.renderTaskText}>{_task.title}</Text>
-                      <Pressable
-                        onPress={() => handleMenuSwitch(_task)}
-                        style={styles.renderTaskMenuSwitch}
-                      >
-                        <MaterialCommunityIcons
-                          name="menu-down"
-                          size={28}
-                          color="black"
-                        />
+                      <Pressable onPress={() => handleMenuSwitch(_task)} style={styles.renderTaskMenuSwitch}>
+                        <MaterialCommunityIcons name="menu-down" size={28} color="black" />
                       </Pressable>
                     </>
                   )}
@@ -226,16 +188,10 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               </Pressable>
               {_task.isMenuOpen && (
                 <View style={styles.renderTaskMenu}>
-                  <Pressable
-                    style={styles.renderTaskMenuBtns}
-                    onPress={() => handleOpenEditingTask(_task)}
-                  >
+                  <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleOpenEditingTask(_task)}>
                     <Text style={styles.renderTaskMenuText}>Edit</Text>
                   </Pressable>
-                  <Pressable
-                    style={styles.renderTaskMenuBtns}
-                    onPress={() => handleRemoveTask(_task)}
-                  >
+                  <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleRemoveTask(_task)}>
                     <Text style={styles.renderTaskMenuText}>Delete</Text>
                   </Pressable>
                 </View>
@@ -245,23 +201,17 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
           contentContainerStyle={styles.renderTaskList}
           ListFooterComponent={
             <>
-              {tasksAllCompleted && tasks.length ? (
+              {tasksAllCompleted && hasTasksLeft ? (
                 <View style={styles.WIPImgContainer}>
-                  <Image
-                    source={require("@/assets/images/task-done.png")}
-                    style={styles.WIPImg}
-                  />
+                  <Image source={require("@/assets/images/task-done.png")} style={styles.WIPImg} />
                   <Text style={styles.WIPImgTitle}>You nailed it!</Text>
                 </View>
               ) : (
                 <></>
               )}
-              {!tasksAllCompleted && tasks.length ? (
+              {!tasksAllCompleted && hasTasksLeft ? (
                 <View style={styles.WIPImgContainer}>
-                  <Image
-                    source={require("@/assets/images/fire.png")}
-                    style={styles.WIPImg}
-                  />
+                  <Image source={require("@/assets/images/fire.png")} style={styles.WIPImg} />
                   <Text style={styles.WIPImgTitle}>Let's roll!</Text>
                 </View>
               ) : (
