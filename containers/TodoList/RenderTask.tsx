@@ -25,22 +25,23 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const hasTasksLeft = tasks.length > 0;
 
   useEffect(() => {
-    const allCompleted = tasks.every((_task) => _task.isCompleted);
+    const checkAllTasksCompleted = tasks.every((_task) => _task.isCompleted);
 
-    if (allCompleted && hasTasksLeft && !confettiPlayed) {
+    if (checkAllTasksCompleted && hasTasksLeft && !confettiPlayed) {
       confettiRef.current?.play(0);
       setConfettiIsPlaying(true);
       setConfettiPlayed(true);
     }
 
-    if (!allCompleted) {
+    if (!checkAllTasksCompleted) {
       setConfettiPlayed(false);
     }
 
-    setTasksAllCompleted(allCompleted);
+    setTasksAllCompleted(checkAllTasksCompleted);
   }, [tasks, hasTasksLeft, confettiPlayed]);
 
   useEffect(() => {
+    // Confetti fails to play on restart with all tasks done, so initialize confettiIsPlaying on mount.
     setConfettiIsPlaying(false);
   }, []);
 
