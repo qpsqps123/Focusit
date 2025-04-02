@@ -1,12 +1,5 @@
 import { theme } from "@/styles/variables";
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SetTimeModalProps } from "./types";
 import { useFonts } from "expo-font";
 import { Jua_400Regular } from "@expo-google-fonts/jua";

@@ -2,45 +2,25 @@ import { Pressable, SafeAreaView, StyleSheet, Text } from "react-native";
 import ControlTimer from "./ControlTimer";
 import SetTimeModal from "./SetTimeModal";
 import { theme } from "@/styles/variables";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { useFonts } from "expo-font";
 import { KaushanScript_400Regular } from "@expo-google-fonts/kaushan-script";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function Timer() {
+  const [fontsLoaded, fontsError] = useFonts({
+    KaushanScript_400Regular,
+  });
+
   const [timerMinutes, setTimerMinutes] = useState(50);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [initMinutes, setInitMinutes] = useState(50);
   const [timerTimeSettingVisible, setTimerTimeSettingVisible] = useState(false);
 
-  const [fontsLoaded, fontsError] = useFonts({
-    KaushanScript_400Regular,
-  });
-
-  useEffect(() => {
-    if (isRunning === false) return;
-    if (timerMinutes <= 0 && timerSeconds <= 0) {
-      setIsRunning(false);
-      setTimerMinutes(initMinutes);
-      setTimerSeconds(0);
-    }
-
-    const timeId = setTimeout(() => {
-      if (timerSeconds <= 0) {
-        setTimerMinutes((prevState) => prevState - 1);
-        setTimerSeconds(59);
-      } else {
-        setTimerSeconds((prevState) => prevState - 1);
-      }
-    }, 1000);
-
-    return () => clearInterval(timeId);
-  }, [isRunning, timerSeconds, timerMinutes]);
-
-  if (!fontsLoaded && !fontsError) {
-    return null;
-  }
+  const startTimeRef = useRef<number | null>(null);
+  const pausedTimeRef = useRef<number | null>(null);
+  const intervelRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleTimerTimeSettingVisible = () => {
     if (isRunning) return;
@@ -48,6 +28,10 @@ export default function Timer() {
 
     setTimerTimeSettingVisible(!timerTimeSettingVisible);
   };
+
+  if (!fontsLoaded && !fontsError) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,14 +42,14 @@ export default function Timer() {
         setTimerMinutes={setTimerMinutes}
         handleTimerTimeSettingVisible={handleTimerTimeSettingVisible}
       />
-      <Pressable
-        style={styles.timerTimeSettingBtn}
-        onPress={handleTimerTimeSettingVisible}
-      >
+      <Pressable style={styles.timerTimeSettingBtn} onPress={handleTimerTimeSettingVisible}>
         <MaterialIcons name="timer" size={35} color={theme.$white} />
       </Pressable>
       <Text style={styles.title}>Timer</Text>
       <ControlTimer
+        startTimeRef={startTimeRef}
+        pausedTimeRef={pausedTimeRef}
+        intervelRef={intervelRef}
         isRunning={isRunning}
         initMinutes={initMinutes}
         timerMinutes={timerMinutes}
