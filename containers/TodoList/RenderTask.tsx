@@ -1,5 +1,5 @@
 import { theme } from "@/styles/variables";
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { setData } from "@/store/store";
 import { TodoListProps, Tasks } from "./types";
 import { useFonts } from "expo-font";
@@ -10,6 +10,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { Image } from "expo-image";
 import { useEffect, useRef, useState } from "react";
 import LottieView from "lottie-react-native";
+import { FlashList } from "@shopify/flash-list";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
@@ -127,18 +128,18 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
         resizeMode="cover"
         onAnimationFinish={handleConfettiAniFinished}
       />
-      <View style={styles.renderTaskWrapper}>
+      <View style={styles.renderTaskListWrapper}>
         {!hasTasksLeft && (
           <View style={styles.emptyTaskContainer}>
             <Image source={require("@/assets/images/no-task.png")} style={styles.emptyTaskImg} />
             <Text style={styles.emptyTaskTitle}>Waiting to kick off...</Text>
           </View>
         )}
-        <FlatList
+        <FlashList
           data={tasks}
           keyExtractor={(_task) => _task.id}
           renderItem={({ item: _task }) => (
-            <View>
+            <View style={styles.renderTaskWrapper}>
               <Pressable
                 style={({ pressed }) => [
                   styles.renderTaskBtn,
@@ -199,7 +200,7 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
               )}
             </View>
           )}
-          contentContainerStyle={styles.renderTaskList}
+          estimatedItemSize={50}
           ListFooterComponent={
             <>
               {tasksAllCompleted && hasTasksLeft ? (
@@ -227,10 +228,11 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
 }
 
 const styles = StyleSheet.create({
-  renderTaskWrapper: {
+  renderTaskListWrapper: {
     flex: 1,
     marginTop: 80,
     width: "80%",
+    height: "100%",
   },
   emptyTaskContainer: {
     opacity: 0.4,
@@ -247,9 +249,7 @@ const styles = StyleSheet.create({
     fontFamily: "Jua_400Regular",
     fontSize: 19,
   },
-  renderTaskList: {
-    gap: 20,
-  },
+  renderTaskWrapper: { marginBottom: 20 },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
     paddingHorizontal: 20,
