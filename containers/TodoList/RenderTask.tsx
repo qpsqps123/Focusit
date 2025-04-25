@@ -4,13 +4,13 @@ import { setData } from "@/store/store";
 import { TodoListProps, Tasks } from "./types";
 import { useFonts } from "expo-font";
 import { Jua_400Regular } from "@expo-google-fonts/jua";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Feather from "@expo/vector-icons/Feather";
 import { Image } from "expo-image";
 import { useEffect, useRef, useState } from "react";
 import LottieView from "lottie-react-native";
 import { FlashList } from "@shopify/flash-list";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function RenderTask({ tasks, setTasks }: TodoListProps) {
   const [fontsLoaded, fontsError] = useFonts({
@@ -165,39 +165,44 @@ export default function RenderTask({ tasks, setTasks }: TodoListProps) {
                         onChangeText={(newText) => handleInputChangeToEditTask(newText, _task)}
                         defaultValue={_task.title}
                       />
-
-                      <Pressable
-                        style={styles.btnToApproveEditingTaskText}
-                        onPress={() => {
-                          handleApproveEditingTask(_task);
-                        }}
-                      >
-                        <Ionicons name="checkmark-sharp" size={28} color="black" />
-                      </Pressable>
-                      <Pressable style={styles.btnToCancelEditingTaskText} onPress={() => handleCancelEditingTask(_task)}>
-                        <Ionicons name="close" size={28} color="black" />
-                      </Pressable>
+                      <View style={styles.editTaskMenu}>
+                        <Pressable
+                          style={styles.editTaskBtns}
+                          onPress={() => {
+                            handleApproveEditingTask(_task);
+                          }}
+                        >
+                          <Ionicons name="checkmark-sharp" size={28} color="black" />
+                        </Pressable>
+                        <Pressable style={styles.editTaskBtns} onPress={() => handleCancelEditingTask(_task)}>
+                          <Ionicons name="close-sharp" size={28} color="black" />
+                        </Pressable>
+                      </View>
                     </>
                   ) : (
                     <>
                       <Text style={styles.renderTaskText}>{_task.title}</Text>
-                      <Pressable onPress={() => handleMenuSwitch(_task)} style={styles.renderTaskMenuSwitch}>
-                        <MaterialCommunityIcons name="menu-down" size={28} color="black" />
-                      </Pressable>
+                      {_task.isMenuOpen ? (
+                        <View style={styles.renderTaskMenu}>
+                          <Pressable onPress={() => handleMenuSwitch(_task)} style={styles.renderTaskMenuSwitch}>
+                            <Feather name="chevrons-up" size={28} color="black" />
+                          </Pressable>
+                          <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleOpenEditingTask(_task)}>
+                            <Feather name="edit" size={28} color="black" />
+                          </Pressable>
+                          <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleRemoveTask(_task)}>
+                            <AntDesign name="delete" size={28} color="black" />
+                          </Pressable>
+                        </View>
+                      ) : (
+                        <Pressable onPress={() => handleMenuSwitch(_task)} style={styles.renderTaskMenuSwitch}>
+                          <Feather name="chevrons-down" size={28} color="black" />
+                        </Pressable>
+                      )}
                     </>
                   )}
                 </View>
               </Pressable>
-              {_task.isMenuOpen && (
-                <View style={styles.renderTaskMenu}>
-                  <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleOpenEditingTask(_task)}>
-                    <Text style={styles.renderTaskMenuText}>Edit</Text>
-                  </Pressable>
-                  <Pressable style={styles.renderTaskMenuBtns} onPress={() => handleRemoveTask(_task)}>
-                    <Text style={styles.renderTaskMenuText}>Delete</Text>
-                  </Pressable>
-                </View>
-              )}
             </View>
           )}
           estimatedItemSize={50}
@@ -249,17 +254,18 @@ const styles = StyleSheet.create({
     fontFamily: "Jua_400Regular",
     fontSize: 19,
   },
-  renderTaskWrapper: { marginBottom: 20 },
+  renderTaskWrapper: {
+    marginBottom: 20,
+  },
   renderTaskBtn: {
     backgroundColor: theme.$primary,
-    paddingHorizontal: 20,
+    paddingLeft: 20,
     paddingVertical: 10,
     borderRadius: 10,
   },
   renderTask: {
     flexDirection: "row",
     gap: 15,
-    alignItems: "stretch",
   },
   inputToEditTaskText: {
     borderBottomWidth: 1,
@@ -269,19 +275,18 @@ const styles = StyleSheet.create({
     color: theme.$darkGray,
     flex: 1,
   },
-  btnToApproveEditingTaskText: {
-    width: 28,
-    height: 28,
+  editTaskMenu: {
+    flexDirection: "row",
+    marginRight: 5,
   },
-  btnToCancelEditingTaskText: {
-    width: 28,
-    height: 28,
+  editTaskBtns: {
+    paddingHorizontal: 5,
   },
   renderTaskText: {
     fontSize: 19,
     color: theme.$darkGray,
     fontFamily: "Jua_400Regular",
-    lineHeight: 28,
+    lineHeight: 24,
     flex: 1,
   },
   WIPImgContainer: {
@@ -301,21 +306,15 @@ const styles = StyleSheet.create({
     fontFamily: "Jua_400Regular",
   },
   renderTaskMenuSwitch: {
-    width: 28,
+    paddingHorizontal: 10,
     height: 28,
   },
   renderTaskMenu: {
-    backgroundColor: theme.$white,
-    borderRadius: 10,
-    position: "absolute",
-    top: 50,
-    right: 0,
-    zIndex: 10,
-    elevation: 10,
+    alignItems: "center",
+    gap: 15,
   },
   renderTaskMenuBtns: {
-    paddingHorizontal: 30,
-    paddingVertical: 18,
+    paddingHorizontal: 10,
   },
   renderTaskMenuText: {
     fontFamily: "Jua_400Regular",
